@@ -1,0 +1,13 @@
+[package]
+name = "main"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+actix-web = { workspace = true }
+anyhow = { workspace = true }
+env_logger = { workspace = true }
+futures = { workspace = true }
+futures-util = { workspace = true }
+serde = { workspace = true }
+sqlx = { workspace = true }
