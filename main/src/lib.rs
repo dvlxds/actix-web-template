@@ -3,6 +3,7 @@ use actix_web::web;
 mod app;
 mod features;
 mod shared;
+mod utils;
 // 导出
 pub use app::AppState;
 pub use app::AppStateData;
