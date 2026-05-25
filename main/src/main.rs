@@ -1,4 +1,4 @@
-use actix_web::{App, HttpResponse, HttpServer, Responder, web};
+use actix_web::{App, HttpResponse, HttpServer, Responder, middleware::Logger, web};
 use env_logger::Env;
 use main::{AppState, config_routes, db::Db};
 async fn manual_hello() -> impl Responder {
@@ -13,8 +13,10 @@ async fn main() -> std::io::Result<()> {
     // 数据库初始化
     Db::init().await.expect("数据库初始化失败，程序无法继续");
     HttpServer::new(move || {
+        let logger = Logger::default();
         App::new()
             .app_data(app_state.clone())
+            .wrap(logger)
             .route("/hey", web::get().to(manual_hello))
             .configure(config_routes)
     })
