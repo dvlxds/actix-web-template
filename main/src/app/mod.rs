@@ -1,6 +1,6 @@
 use actix_web::web;
 
-use crate::features::users;
+use crate::users;
 
 pub struct AppState {
     pub user_uservice: users::UserService,
