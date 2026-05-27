@@ -11,3 +11,5 @@ serde = { version = "1.0.228", features = ["derive"] }
 sqlx = { version = "0.8.6" , features = ["sqlite","runtime-tokio-native-tls","macros"] }
 anyhow = "1.0.102"
 uuid = "1.23.1"
+actix-multipart = "0.7.2"
+tokio = { version = "1", features = ["fs", "io-util"] }
