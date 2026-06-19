@@ -7,6 +7,9 @@ actix-web = "4"
 env_logger = "0.11.10"
 futures = "0.3.32"
 futures-util = "0.3.32"
-serde = { version = "1.0.228", features = ["derive"] }
-sqlx = { version = "0.8.6" , features = ["sqlite","runtime-tokio-native-tls","macros"] }
+serde = { version = "1.0.228" }
+sqlx = { version = "0.8.6" }
 anyhow = "1.0.102"
+sea-orm = { version = "2.0.0-rc" }
+tracing-subscriber = { version = "0.3.23" }
+tracing = "0.1.44"
