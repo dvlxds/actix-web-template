@@ -1,10 +1,14 @@
 use actix_web::{App, HttpResponse, HttpServer, Responder, web};
 // use env_logger::Env;
-use main::{AppState, config_routes, db::sqlx_db};
+use main::{
+    AppState, config_routes,
+    db::{sea_db::Db},
+};
+use migration::{Migrator, MigratorTrait};
+
 async fn manual_hello() -> impl Responder {
     HttpResponse::Ok().body("Hey there!")
 }
-
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
@@ -20,9 +24,13 @@ async fn main() -> std::io::Result<()> {
     // 全局服务
     let app_state = web::Data::new(AppState::new());
     // 数据库初始化
-    sqlx_db::Db::init()
-        .await
-        .expect("数据库初始化失败，程序无法继续");
+    Db::init().await.expect("数据库初始化失败，程序无法继续");
+
+    let db_conn = Db::get().expect("获取数据库连接失败");
+
+    Migrator::up(db_conn, None).await.expect("数据库迁移失败");
+    println!("✅ 数据库迁移完成");
+
     HttpServer::new(move || {
         App::new()
             .app_data(app_state.clone())

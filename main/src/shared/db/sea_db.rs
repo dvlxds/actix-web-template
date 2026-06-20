@@ -11,21 +11,27 @@ pub struct Db;
 impl Db {
     // / 初始化全局数据库连接（在 main 中调用一次）
     pub async fn init() -> Result<()> {
-        let mut opt = ConnectOptions::new("sqlite://path/to/db.sqlite?mode=rwc");
+        // 修正：使用动态路径
+        let current_dir = std::env::current_dir()?;
+        let db_path = current_dir.join("database.db");
+        let db_path_str = db_path.to_str().context("路径转换失败")?;
+        let connection_string = format!("sqlite:{}", db_path_str);
+
+        println!("Connecting to database at: {}", connection_string);
+
+        let mut opt = ConnectOptions::new(connection_string);
         opt.max_connections(100)
             .min_connections(5)
             .connect_timeout(Duration::from_secs(8))
             .acquire_timeout(Duration::from_secs(8))
             .idle_timeout(Duration::from_secs(8))
             .max_lifetime(Duration::from_secs(8))
-            .sqlx_logging(false) // disable SQLx logging
-            // .sqlx_logging_level(log::LevelFilter::Info)
-            .set_schema_search_path("my_schema"); // set default Postgres schema
+            .sqlx_logging(false);
 
         let db: sea_orm::prelude::DatabaseConnection = Database::connect(opt).await?;
-        if let Err(err) = DB_POOL.set(db) {
-            println!("连接失败{:?}", err)
-        };
+        DB_POOL
+            .set(db)
+            .map_err(|_| anyhow::anyhow!("数据库连接已初始化"))?;
         Ok(())
     }
 
