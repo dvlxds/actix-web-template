@@ -1,0 +1,13 @@
+[package]
+name = "utils"
+version = "0.1.0"
+edition = "2024"
+
+[features]
+default = []
+jwt = ["dep:jsonwebtoken"]
+
+[dependencies]
+jsonwebtoken = { version = "10.4.0", features = ["aws_lc_rs"], optional = true }
+serde = { workspace = true, features = ["derive"] }
+anyhow = { workspace = true }
