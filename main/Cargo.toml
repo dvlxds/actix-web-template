@@ -9,9 +9,22 @@ anyhow = { workspace = true }
 env_logger = { workspace = true }
 futures = { workspace = true }
 futures-util = { workspace = true }
-serde = { workspace = true }
-sqlx = { workspace = true }
 uuid = { workspace = true, features = ["v4", "v7", "fast-rng"] }
 actix-multipart = { workspace = true }
 tokio = { workspace = true }
 utils = {path = "../utils"}
+serde = { workspace = true ,features = ["derive"] }
+sqlx = { workspace = true, features = [
+  "sqlite",
+  "runtime-tokio-native-tls",
+  "macros",
+] }
+sea-orm = { workspace = true, features = [
+  "sqlx-sqlite",
+  "runtime-tokio-native-tls",
+  "macros",
+  "debug-print",
+] }
+tracing-subscriber = { workspace = true,features = ["env-filter"] }
+tracing = {workspace = true}
+migration={path = "../migration"}

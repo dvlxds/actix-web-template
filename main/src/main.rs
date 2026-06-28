@@ -1,6 +1,6 @@
 use actix_web::{App, HttpResponse, HttpServer, Responder, middleware::Logger, web};
 use env_logger::Env;
-use main::{AppState, config_routes, db::Db};
+use main::{AppState, config_routes, db::sea_db::Db};
 async fn manual_hello() -> impl Responder {
     HttpResponse::Ok().body("Hey there!")
 }
@@ -12,6 +12,12 @@ async fn main() -> std::io::Result<()> {
     let app_state = web::Data::new(AppState::new());
     // 数据库初始化
     Db::init().await.expect("数据库初始化失败，程序无法继续");
+
+    // let db_conn = Db::get().expect("获取数据库连接失败");
+
+    // Migrator::up(db_conn, None).await.expect("数据库迁移失败");
+    println!("✅ 数据库迁移完成");
+
     HttpServer::new(move || {
         let logger = Logger::default();
         App::new()
